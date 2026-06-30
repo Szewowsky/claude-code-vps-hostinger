@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Edytory
+.vscode/
+.idea/
+*.swp
+
+# Sekrety - nigdy nie commituj
+*.pem
+*.key
+id_ed25519*
+id_rsa*
+.env
