@@ -111,11 +111,13 @@ Zaloguj się z komputera i z telefonu **kluczem** (bez hasła). Dopiero gdy oba 
 sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf && sudo systemctl restart ssh
 ```
 
-Sprawdź, że hasło faktycznie wyłączone (powinno odbić - `Permission denied (publickey)`):
+Sprawdź **z komputera** (nowe okno terminala - NIE z serwera!) - zaloguj się ponownie:
 
 ```bash
-ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no root@twoj-serwer
+ssh root@twoj-serwer
 ```
+
+Powinno wpuścić od razu **kluczem, bez pytania o hasło**. To znaczy: klucz działa, a logowanie hasłem jest wyłączone. Gotowe.
 
 ---
 
