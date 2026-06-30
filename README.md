@@ -43,9 +43,39 @@ Pojawi się link do logowania. W prompcie wciśnij klawisz **`c`** - Claude Code
 
 ## 2. Zabezpiecz VPS (ważne!)
 
-> **🔑 ZASADA NR 1:** najpierw klucze, **na końcu** wyłączenie hasła. Jeśli wyłączysz hasło, zanim klucz działa, zostaniesz za drzwiami. Rób to dokładnie w tej kolejności.
+> **🔑 KOLEJNOŚĆ MA ZNACZENIE:** fail2ban i firewall włącz od razu (niczego nie blokują). Ale **klucze SSH ustaw przed wyłączeniem hasła** - inaczej zostaniesz za drzwiami. Hasło wyłączamy na samym końcu (krok 2f).
 
-### 2a. Klucz SSH z komputera
+### 2a. fail2ban (blokuje ataki brute-force)
+
+Zainstaluj:
+
+```bash
+sudo apt install -y fail2ban
+```
+
+Sprawdź, że działa (szukaj `active (running)`; wyjdź klawiszem `q`):
+
+```bash
+sudo systemctl status fail2ban
+```
+
+### 2b. Firewall - przepuść tylko SSH
+
+Włącz firewall i otwórz port SSH:
+
+```bash
+sudo ufw allow 22 && sudo ufw enable
+```
+
+Sprawdź (szukaj `Status: active` oraz `22 ALLOW`):
+
+```bash
+sudo ufw status
+```
+
+> Hostinger blokuje niestandardowe porty SSH - **zostaw port 22**.
+
+### 2c. Klucz SSH z komputera
 
 Wygeneruj klucz (Terminal na Mac/Linux, PowerShell na Windows):
 
@@ -67,32 +97,24 @@ Wgraj go na serwer jedną komendą (póki masz dostęp):
 ssh-copy-id root@twoj-serwer
 ```
 
-### 2b. Klucz SSH z telefonu (Termius)
+### 2d. Klucz SSH z telefonu (Termius)
 
 W Termiusie: *Keychain → wygeneruj klucz → przytrzymaj → Export to host* (albo wklej jego publiczny klucz w Hostinger przy tworzeniu VPS).
 
-### 2c. Przetestuj klucze
+### 2e. Przetestuj klucze
 
 Zaloguj się z komputera i z telefonu **kluczem** (bez hasła). Dopiero gdy oba wchodzą - przejdź dalej.
 
-### 2d. fail2ban (blokuje ataki brute-force)
-
-```bash
-sudo apt install -y fail2ban
-```
-
-### 2e. Firewall - przepuść tylko SSH
-
-```bash
-sudo ufw allow 22 && sudo ufw enable
-```
-
-> Hostinger blokuje niestandardowe porty SSH - **zostaw port 22**.
-
-### 2f. Wyłącz logowanie hasłem (DOPIERO po teście kluczy z 2c!)
+### 2f. Wyłącz logowanie hasłem (DOPIERO po teście kluczy z 2e!)
 
 ```bash
 sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf && sudo systemctl restart ssh
+```
+
+Sprawdź, że hasło faktycznie wyłączone (powinno odbić - `Permission denied (publickey)`):
+
+```bash
+ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no root@twoj-serwer
 ```
 
 ---
