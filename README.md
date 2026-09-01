@@ -1,5 +1,8 @@
 # Claude Code na VPS (Hostinger) - dostęp z telefonu i kompa
 
+> **Szukasz samego połączenia z komputera** (terminal, aplikacja desktopowa, edytor)?
+> Masz to osobno, z gotowcem do wklejenia agentowi: **[POLACZENIE-Z-KOMPUTERA.md](POLACZENIE-Z-KOMPUTERA.md)**
+
 Postaw **Claude Code** (i opcjonalnie **Codex**) na własnym VPS, żeby działał 24/7, i łącz się z nim z telefonu albo z pulpitu. Koduj z dowolnego miejsca - z kanapy, pociągu, kawiarni.
 
 > Instrukcja towarzysząca filmowi na YouTube. Każda komenda jest w osobnym bloku - kliknij ikonę kopiowania i wklej do terminala. Zamiast `twoj-serwer` wstaw adres swojego VPS.
@@ -170,9 +173,16 @@ Claude Code (i Codex) na komputerze ma wbudowane **"Add SSH connection"** - odpa
 | Pole | Wartość |
 |---|---|
 | Name | dowolne, np. `Moj VPS` |
-| SSH Host | `root@twoj-serwer` |
-| SSH Port | puste (domyślnie 22) |
+| SSH Host | `twoj-uzytkownik@twoj-serwer` (**nie root** - patrz 2f) |
+| SSH Port | Twój port SSH (`22`, chyba że go zmieniałeś) |
 | Identity File | `~/.ssh/id_ed25519` |
+
+> **Prościej:** jeśli dodasz sobie skrót w `~/.ssh/config`, w pole **SSH Host** wpisujesz samą jego
+> nazwę (np. `vps`), a **SSH Port i Identity File zostawiasz puste** - aplikacja weźmie je z configu.
+> Jak to ustawić: **[POLACZENIE-Z-KOMPUTERA.md](POLACZENIE-Z-KOMPUTERA.md)**.
+
+**Przy pierwszym połączeniu aplikacja sama instaluje Claude Code na zdalnej maszynie** - nie musisz
+tam nic stawiać ręcznie. Uwaga: **Codex tego nie robi** i wymaga, żeby `codex` był już na serwerze.
 
 > Jeśli zobaczysz **"Host denied / verification failed"** po postawieniu serwera od nowa - Twój komputer pamięta stary "odcisk" serwera. Usuń go i połącz ponownie:
 > ```bash
